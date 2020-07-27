@@ -1,6 +1,5 @@
 // /.netlify/functions/elevation
 
-const haversine = require('haversine');
 const { 
   oneDegreeOfLat,
   degreesToRadians,
@@ -15,7 +14,7 @@ exports.handler = async (event, context) => {
     console.log('This is the point data ****', pointData);
     console.log(pointData.length);
     return { 
-      body: JSON.stringify(pointData),
+      body: JSON.stringify({ elevationPoints: pointData }),
       statusCode: 200,
     };
   }
