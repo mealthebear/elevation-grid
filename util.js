@@ -1,3 +1,4 @@
+const haversine = require('haversine');
 const oneDegreeOfLat = 24901 / 360;
 
 const degreesToRadians = (lat) => {
@@ -32,10 +33,20 @@ const squareMaker = (numOfDots, distance, lat, lon) => {
         lat: startingLat,
         lon: startingLon,
       }
+      if (haversine(currentPoint, {'lat': lat, 'lon': lon}, { 'unit': 'mile'}) <= distance) {
       elevationPoints.push(currentPoint);
+      }
       startingLon += lonIncrementer;
     }
     startingLat -= latIncrementer;
   }
   return elevationPoints;
 }
+
+module.exports = {
+  oneDegreeOfLat,
+  degreesToRadians,
+  distanceToLat,
+  distanceToLon,
+  squareMaker,
+};

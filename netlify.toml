@@ -1,4 +1,8 @@
-[[build]]
+[build]
   publish = ""
   command = "echo 'I be building' "
   functions = "func/"
+
+[[redirects]]
+  from = "api/elevation"
+  to = "/.netlify/functions/elevation"
