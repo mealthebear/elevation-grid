@@ -19,25 +19,27 @@ const distanceToLon = (distance, lat) => {
 }
 
 const squareMaker = (numOfDots, distance, lat, lon) => {
-  const elevationPoints = [];
+  let elevationPoints = [];
   const circleToSquareRatio = 4 / Math.PI
   const squareSize = Math.ceil(Math.sqrt(numOfDots * circleToSquareRatio));
   let startingLat = lat + distanceToLat(distance); 
   let startingLon = lon - distanceToLon(distance, lat);
+  let trueStartingLon = lon - distanceToLon(distance, lat);
   const latIncrementer = (distanceToLon(distance, lat) * 2) / squareSize;
   const lonIncrementer = (distanceToLat(distance) * 2) / squareSize;
 
   for (let i = 0; i < squareSize; i++) {
     for (let j = 0; j < squareSize; j++) {
       let currentPoint = {
-        lat: startingLat,
-        lon: startingLon,
+        'latitude': startingLat,
+        'longitude': startingLon,
       }
-      if (haversine(currentPoint, {'lat': lat, 'lon': lon}, { 'unit': 'mile'}) <= distance) {
+      if (haversine(currentPoint, {'latitude': lat, 'longitude': lon}, { 'unit': 'mile'}) <= distance) {
       elevationPoints.push(currentPoint);
       }
       startingLon += lonIncrementer;
     }
+    startingLon = trueStartingLon;
     startingLat -= latIncrementer;
   }
   return elevationPoints;

@@ -4,5 +4,6 @@
   functions = "func/"
 
 [[redirects]]
-  from = "api/elevation"
+  from = "/api/elevation"
   to = "/.netlify/functions/elevation"
+  status = 200

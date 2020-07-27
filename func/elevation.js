@@ -1,5 +1,6 @@
 // /.netlify/functions/elevation
 
+const haversine = require('haversine');
 const { 
   oneDegreeOfLat,
   degreesToRadians,
@@ -8,15 +9,13 @@ const {
   squareMaker 
 } = require('../util.js');
 
-module.exports = async (event, context) => {
+exports.handler = async (event, context) => {
   try {
-    const data = (haversine(
-    {'latitude': 33.68, 'longitude': -117.84}, 
-    {'latitude': 33.54, 'longitude': -117.65}, 
-    {'unit': 'miles'}));
-
+    const pointData = squareMaker(100, 100, 33.68, -117.86)
+    console.log('This is the point data ****', pointData);
+    console.log(pointData.length);
     return { 
-      body: JSON.stringify(data),
+      body: JSON.stringify(pointData),
       statusCode: 200,
     };
   }
