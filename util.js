@@ -18,17 +18,35 @@ const distanceToLon = (distance, lat) => {
   return distance / horizontalDistance;
 }
 
-const squareMaker = (numOfDots, distance, lat, lon) => {
+const squareMaker = (numOfDots, distance, lat, lon) => {  // -89 lat, -179 lon, 100 mile distance, 100 numofpoints
   let elevationPoints = [];
-  const circleToSquareRatio = 4 / Math.PI
+  const circleToSquareRatio = 4 / Math.PI 
   const squareSize = Math.ceil(Math.sqrt(numOfDots * circleToSquareRatio));
-  let startingLat = lat + distanceToLat(distance); 
-  let startingLon = lon - distanceToLon(distance, lat);
-  let trueStartingLon = lon - distanceToLon(distance, lat);
-  const latIncrementer = (distanceToLon(distance, lat) * 2) / squareSize;
-  const lonIncrementer = (distanceToLat(distance) * 2) / squareSize;
+  let startingLat = lat + distanceToLat(distance); // -89 + (1.45) => -87.55
+  let startingLon = lon - distanceToLon(distance, lat); // -179 - (83) => 96
+  let trueStartingLon = lon - distanceToLon(distance, lat); // 96
+  let latIncrementer = (distanceToLon(distance, lat) * 2) / squareSize; // 83 * 2 / 12 => 13.8
+  const lonIncrementer = (distanceToLat(distance) * 2) / squareSize; // 1.45 * 2 / 12 => 0.24
 
   for (let i = 0; i < squareSize; i++) {
+    if (startingLat > 90) {
+      startingLat = 180 - startingLat;
+      latIncrementer *= -1;
+      if (startingLon >= 0) {
+        trueStartingLon -= 180;
+      } else {
+        trueStartingLon += 180;
+      }
+    } else if (startingLat < -90) {
+      startingLat = -180 - startingLat;
+      latIncrementer *= -1;
+      if (startingLon >= 0) {
+        trueStartingLon -= 180;
+      } else {
+        trueStartingLon += 180;
+      }
+    }
+    startingLon = trueStartingLon;
     for (let j = 0; j < squareSize; j++) {
       let currentPoint = {
         'latitude': startingLat,
@@ -40,11 +58,10 @@ const squareMaker = (numOfDots, distance, lat, lon) => {
       startingLon += lonIncrementer;
       if (startingLon > 180) {
         startingLon -= 360;
-      } else if (startingLon < -180) {
+      } else if (startingLon < -180) { //make sure -180 works with API
         startingLon += 360;
       }
     }
-    startingLon = trueStartingLon;
     startingLat -= latIncrementer;
   }
   return elevationPoints;
