@@ -38,6 +38,11 @@ const squareMaker = (numOfDots, distance, lat, lon) => {
       elevationPoints.push(currentPoint);
       }
       startingLon += lonIncrementer;
+      if (startingLon > 180) {
+        startingLon -= 360;
+      } else if (startingLon < -180) {
+        startingLon += 360;
+      }
     }
     startingLon = trueStartingLon;
     startingLat -= latIncrementer;
