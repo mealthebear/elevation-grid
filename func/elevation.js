@@ -1,16 +1,10 @@
 // /.netlify/functions/elevation
 
-const { 
-  oneDegreeOfLat,
-  degreesToRadians,
-  distanceToLat,
-  distanceToLon,
-  squareMaker 
-} = require('../util.js');
+const { squareMaker } = require('../squareMaker.js');
 
 exports.handler = async (event, context) => {
   try {
-    const pointData = squareMaker(100, 100, 33.68, -117.86)
+    const pointData = squareMaker(100, 100, 33.68, -117.86);
     console.log('This is the point data ****', pointData);
     console.log(pointData.length);
     return { 
