@@ -92,10 +92,4 @@ const squareMaker = (numOfDots, distance, lat, lon) => {
   return elevationPoints;
 }
 
-module.exports = {
-  // oneDegreeOfLat,
-  // degreesToRadians,
-  // distanceToLat,
-  // distanceToLon,
-  squareMaker,
-};
+module.exports = { squareMaker };
