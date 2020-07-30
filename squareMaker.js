@@ -74,8 +74,20 @@ const squareMaker = (numOfDots, distance, lat, lon) => {
 
     // set startingLon to trueStartingLon
     startingLon = trueStartingLon;
+
+    // update lonIncrementer
+    lonIncrementer = (distanceToLon(distance, startingLat));
     for (let j = 0; j < squareSize; j++) {
-     
+      let currentPoint = {
+        latitude: startingLat,
+        longitude: startingLon,
+      };
+      elevationPoints.push(currentPoint);
+      startingLon += lonIncrementer;
+      startingLon = validateLongitude(startingLon);
     }
+    // Increment Lat
+    startingLat -= latIncrementer;
   }
+  return elevationPoints;
 }
