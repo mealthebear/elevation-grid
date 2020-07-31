@@ -1,9 +1,13 @@
-/* Divides the Earth's circumference by 360 to get
-a measureable distance for each degree of latitude (≈ 69 miles )  */
+/* 
+Divides the Earth's circumference by 360 to get
+a measureable distance for each degree of latitude (≈ 69 miles )  
+*/
 const oneDegreeOfLat = 24901 / 360;
 
-/* JavaScript's Math.cos function only works with radians,
-so this formula converts the given latitude to radians */
+/* 
+JavaScript's Math.cos function only works with radians,
+so this formula converts the given latitude to radians 
+*/
 const degreesToRadians = (lat) => {
   return (lat / 180) * Math.PI;
 }
