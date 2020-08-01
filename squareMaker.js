@@ -1,20 +1,10 @@
-/* 
-Divides the Earth's circumference by 360 to get
-a measureable distance for each degree of latitude (≈ 69 miles )  
-*/
-const oneDegreeOfLat = 24901 / 360;
-
-/* 
-JavaScript's Math.cos function only works with radians,
-so this formula converts the given latitude to radians 
-*/
-const degreesToRadians = (lat) => {
-  return (lat / 180) * Math.PI;
-}
+const earthRadius = 6371000;
+const degreesToRadians = Math.PI / 180;
+const radiansToDegrees = 180 / Math.PI;
 
 // Convert the distance requested into degrees of latitude
 const distanceToLat = (distance) => {
-  return distance / oneDegreeOfLat;
+  return (distance / earthRadius) * radiansToDegrees;
 }
 
 /* 
@@ -32,12 +22,15 @@ const distanceToLon = (distance, lat) => {
     currentLat = -180 - currentLat;
   }
 
-  let latRadians = Math.cos(degreesToRadians(currentLat));
-  let horizontalDistance = oneDegreeOfLat * latRadians
-  if (distance / horizontalDistance > 360) { 
-    return 360;
+  const r = earthRadius * Math.cos(currentLat * degreesToRadians);
+
+  // Subtract 2π (360°) from the radian value until it is between 0 and 2π
+  let rads = distance / r;
+  while (rads >= 2 * Math.PI) {
+    rads -= 2 * Math.PI;
   }
-  return distance / horizontalDistance;
+
+  return rads * radiansToDegrees;
 }
 
 const findNextSquare = numOfDots => {
@@ -98,11 +91,22 @@ numOfDots, has sides of length distance * 2, and is centered around coordinates
 const squareMaker = (numOfDots, distance, lat, lon) => {
   let elevationPoints = [];
   const squareSize = findNextSquare(numOfDots);
+  const squareSideLength = distance * 2;
+  // How far to go north from the epicenter
   let startingLat = lat + distanceToLat(distance);
+  // How far to go west from the epicenter
   let startingLon = validateLongitude(lon - distanceToLon(distance, lat));
+  // Reference point for longitude to reset to when we move to the next latitude
   let trueStartingLon = startingLon;
-  let latIncrementer = (distanceToLat(distance) * 2) / squareSize;
-  let lonIncrementer = (distanceToLon(distance, lat) * 2) / squareSize;
+  /* 
+  We know how far to go north or west, but that's only half the total distance.
+  We also need to go the same distance to the south and east. We can multiply
+  by 2 to achieve this. Then, divide by the side of the square (all sides are
+  equal in length) to know how much to increment to get evenly spaced points
+  (North to south  &  West to East)
+  */
+  let latIncrementer = distanceToLat(squareSideLength) / squareSize;
+  let lonIncrementer = distanceToLon(squareSideLength, lat) / squareSize;
 
   for (let i = 0; i < squareSize; i++) {  
     // check that startingLat is valid
@@ -115,8 +119,8 @@ const squareMaker = (numOfDots, distance, lat, lon) => {
     // set startingLon to trueStartingLon
     startingLon = trueStartingLon;
 
-    // update lonIncrementer
-    lonIncrementer = (distanceToLon(distance, startingLat));
+    // update lonIncrementer based on latitude
+    lonIncrementer = distanceToLon(squareSideLength, startingLat) / squareSize;
     for (let j = 0; j < squareSize; j++) {
       let currentPoint = {
         latitude: startingLat,
@@ -126,7 +130,7 @@ const squareMaker = (numOfDots, distance, lat, lon) => {
       startingLon += lonIncrementer;
       startingLon = validateLongitude(startingLon);
     }
-    // Increment Lat
+    // Decrement Lat
     startingLat -= latIncrementer;
   }
   return elevationPoints;
