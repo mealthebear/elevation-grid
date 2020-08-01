@@ -14,7 +14,7 @@ exports.handler = async (event, context) => {
   }
   catch (error) {
     return { 
-      body: error.toString(),
+      body: error.message,
       statusCode: 500,  
     };
   }

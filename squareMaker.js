@@ -91,6 +91,7 @@ numOfDots, has sides of length distance * 2, and is centered around coordinates
 const squareMaker = (numOfDots, distance, lat, lon) => {
   let elevationPoints = [];
   const squareSize = findNextSquare(numOfDots);
+  // Calculate the distance of one side of the square by multiplying the distance given by 2
   const squareSideLength = distance * 2;
   // How far to go north from the epicenter
   let startingLat = lat + distanceToLat(distance);
@@ -99,10 +100,8 @@ const squareMaker = (numOfDots, distance, lat, lon) => {
   // Reference point for longitude to reset to when we move to the next latitude
   let trueStartingLon = startingLon;
   /* 
-  We know how far to go north or west, but that's only half the total distance.
-  We also need to go the same distance to the south and east. We can multiply
-  by 2 to achieve this. Then, divide by the side of the square (all sides are
-  equal in length) to know how much to increment to get evenly spaced points
+  Divide by the side of the square (all sides are equal in length) 
+  to know how much to increment to get evenly spaced points
   (North to south  &  West to East)
   */
   let latIncrementer = distanceToLat(squareSideLength) / squareSize;
