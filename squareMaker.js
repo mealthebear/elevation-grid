@@ -25,10 +25,7 @@ const distanceToLon = (distance, lat) => {
   const r = earthRadius * Math.cos(currentLat * degreesToRadians);
 
   // Subtract 2π (360°) from the radian value until it is between 0 and 2π
-  let rads = distance / r;
-  while (rads >= 2 * Math.PI) {
-    rads -= 2 * Math.PI;
-  }
+  let rads = (distance / r) % (2 * Math.PI);
 
   return rads * radiansToDegrees;
 }
