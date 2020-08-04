@@ -9,16 +9,16 @@ exports.handler = async (event, context) => {
     const pointData = squareMaker(100, 16000, 33.68, -117.86);
     // console.log('This is the point data ****', pointData);
     // console.log(pointData.length);
-    // test comment
     const elevation = await axios.get(
       process.env.FREE_TOPO_API, 
-      { params: {
-          locations: polyline.encode(pointData),
-        }
-      }
+      {params: {
+        locations: polyline.encode(pointData),
+      }}
     );
     return { 
-      body: JSON.stringify({topology: elevation.data.results}),
+      body: JSON.stringify({
+        topology: elevation.data.results
+      }),
       statusCode: 200,
     };
   }
@@ -28,4 +28,4 @@ exports.handler = async (event, context) => {
       statusCode: 500,  
     };
   }
-}
+};

@@ -4,7 +4,7 @@
   "description": "",
   "main": "util.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "npx eslint"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,8 @@
   "dependencies": {
     "@mapbox/polyline": "^1.1.1",
     "axios": "^0.19.2",
+    "eslint": "^7.6.0",
+    "eslint-plugin-react": "^7.20.5",
     "haversine": "^1.1.1"
   }
 }
